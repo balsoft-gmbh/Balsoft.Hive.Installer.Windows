@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- A complete product Setup, as a product repository would write it. CI builds it so the
+       payload packing and embedding is exercised end to end. It references the library as a
+       project; a product references the NuGet package instead and needs no Import below. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>SampleProduct-Setup</AssemblyName>
+    <RootNamespace>SampleProduct.Setup</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <Version>1.0.0</Version>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <InstallerPayloadDirectory>payload</InstallerPayloadDirectory>
+    <HiveInstallerPackerPath>$(MSBuildThisFileDirectory)..\..\src\Balsoft.Hive.Installer.Windows.Packer\bin\$(Configuration)\net8.0\Balsoft.Hive.Installer.Windows.Packer.dll</HiveInstallerPackerPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Balsoft.Hive.Installer.Windows\Balsoft.Hive.Installer.Windows.csproj" />
+    <ProjectReference Include="..\..\src\Balsoft.Hive.Installer.Windows.Packer\Balsoft.Hive.Installer.Windows.Packer.csproj"
+                      ReferenceOutputAssembly="false"
+                      SkipGetTargetFrameworkProperties="true" UndefineProperties="TargetFramework;RuntimeIdentifier;SelfContained" />
+    <Resource Include="..\..\icon.png" Link="Assets\logo.png" />
+    <None Remove="payload\**" />
+  </ItemGroup>
+
+  <Import Project="..\..\src\Balsoft.Hive.Installer.Windows\buildTransitive\Balsoft.Hive.Installer.Windows.targets" />
+
+</Project>

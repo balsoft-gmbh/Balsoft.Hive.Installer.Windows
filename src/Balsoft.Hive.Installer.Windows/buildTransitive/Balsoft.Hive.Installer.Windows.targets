@@ -1,0 +1,34 @@
+<Project>
+
+  <!--
+    Embeds a product's program files into its Setup executable.
+
+    In the Setup project:
+      <InstallerPayloadDirectory>path\to\signed\files</InstallerPayloadDirectory>
+      <InstallerPayloadVersion>2.3.0</InstallerPayloadVersion>   (optional, default $(Version))
+
+    The folder is packed (tar + Brotli) into $(IntermediateOutputPath)payload.tar.br and embedded as
+    the resource payload.tar.br, which InstallerApp.Run reads. Only files at the top level of the
+    folder are installed. Sign the program files BEFORE this build and Setup itself AFTER it.
+  -->
+  <PropertyGroup>
+    <InstallerPayloadVersion Condition="'$(InstallerPayloadVersion)' == ''">$(Version)</InstallerPayloadVersion>
+    <HiveInstallerPackerPath Condition="'$(HiveInstallerPackerPath)' == ''">$(MSBuildThisFileDirectory)..\tools\packer\Balsoft.Hive.Installer.Windows.Packer.dll</HiveInstallerPackerPath>
+  </PropertyGroup>
+
+  <!-- Before the resource names are assigned, after project references (a local packer) are built. -->
+  <Target Name="HiveInstallerEmbedPayload" BeforeTargets="PrepareResourceNames" Condition="'$(InstallerPayloadDirectory)' != ''">
+    <PropertyGroup>
+      <_HiveInstallerPayloadFile>$(IntermediateOutputPath)payload.tar.br</_HiveInstallerPayloadFile>
+      <_HiveInstallerPayloadDirectory>$([System.IO.Path]::GetFullPath('$(InstallerPayloadDirectory)').TrimEnd('\').TrimEnd('/'))</_HiveInstallerPayloadDirectory>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(_HiveInstallerPayloadDirectory)')" Text="InstallerPayloadDirectory '$(InstallerPayloadDirectory)' does not exist." />
+    <Error Condition="!Exists('$(HiveInstallerPackerPath)')" Text="The installer payload packer was not found at '$(HiveInstallerPackerPath)'." />
+    <Exec Command="dotnet &quot;$(HiveInstallerPackerPath)&quot; &quot;$(_HiveInstallerPayloadDirectory)&quot; &quot;$(_HiveInstallerPayloadFile)&quot; &quot;$(InstallerPayloadVersion)&quot;" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(_HiveInstallerPayloadFile)" LogicalName="payload.tar.br" WithCulture="false" Type="Non-Resx" />
+      <FileWrites Include="$(_HiveInstallerPayloadFile)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Balsoft.Hive.Installer.Windows/Balsoft.Hive.Installer.Windows.csproj" />
+    <Project Path="src/Balsoft.Hive.Installer.Windows.Packer/Balsoft.Hive.Installer.Windows.Packer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Balsoft.Hive.Installer.Windows.Tests/Balsoft.Hive.Installer.Windows.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/SampleProduct.Setup/SampleProduct.Setup.csproj" />
+  </Folder>
+</Solution>

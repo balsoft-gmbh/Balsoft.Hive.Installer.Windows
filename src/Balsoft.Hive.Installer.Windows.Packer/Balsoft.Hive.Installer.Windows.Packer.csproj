@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Build-time tool shipped inside the package (tools/packer): packs a product's program files
+       into the payload that Setup embeds. Runs on any installed .NET 8 or later runtime. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Balsoft.Hive.Installer.Windows</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Balsoft.Hive.Installer.Windows\Payload\PayloadArchive.cs" Link="PayloadArchive.cs" />
+  </ItemGroup>
+
+</Project>

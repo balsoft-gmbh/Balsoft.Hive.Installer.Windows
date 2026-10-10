@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows;net10.0-windows</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Balsoft.Hive.Installer.Windows</RootNamespace>
+    <PackageId>Balsoft.Hive.Installer.Windows</PackageId>
+    <Description>A Windows installer for .NET products, built in WPF: a per-machine Setup.exe with a wizard, silent modes, upgrades with rollback, a version check, a Windows service, shortcuts, an "Apps &amp; features" entry and its own uninstaller. The program files are embedded at build time. Command line /SILENT, /VERYSILENT, /SUPPRESSMSGBOXES, /LOG, /DIR, /TASKS with documented exit codes, for update mechanisms and IT scripts.</Description>
+    <IsPackable>true</IsPackable>
+    <!-- LibraryImport generates its marshalling code with unsafe blocks. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    <None Include="buildTransitive\Balsoft.Hive.Installer.Windows.targets" Pack="true" PackagePath="buildTransitive\" />
+  </ItemGroup>
+
+  <!-- The packer is built here and shipped in tools/packer; the build targets run it. It is always
+       built with the same global properties as the solution build (no TargetFramework passed
+       down), so MSBuild builds it once instead of twice in parallel. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Balsoft.Hive.Installer.Windows.Packer\Balsoft.Hive.Installer.Windows.Packer.csproj"
+                      ReferenceOutputAssembly="false" PrivateAssets="all"
+                      SkipGetTargetFrameworkProperties="true" UndefineProperties="TargetFramework;RuntimeIdentifier;SelfContained" />
+  </ItemGroup>
+
+  <Target Name="HiveInstallerPackPacker" BeforeTargets="_GetPackageFiles">
+    <MSBuild Projects="..\Balsoft.Hive.Installer.Windows.Packer\Balsoft.Hive.Installer.Windows.Packer.csproj"
+             Targets="$([MSBuild]::ValueOrDefault('$(NoBuild)', 'false').Replace('true', 'GetTargetPath').Replace('false', 'Build;GetTargetPath'))"
+             Properties="Configuration=$(Configuration)" RemoveProperties="TargetFramework;RuntimeIdentifier;SelfContained">
+      <Output TaskParameter="TargetOutputs" ItemName="_HiveInstallerPackerOutput" />
+    </MSBuild>
+    <PropertyGroup>
+      <_HiveInstallerPackerDir>@(_HiveInstallerPackerOutput->'%(RootDir)%(Directory)'->Distinct())</_HiveInstallerPackerDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <None Include="$(_HiveInstallerPackerDir)Balsoft.Hive.Installer.Windows.Packer.dll;$(_HiveInstallerPackerDir)Balsoft.Hive.Installer.Windows.Packer.runtimeconfig.json;$(_HiveInstallerPackerDir)Balsoft.Hive.Installer.Windows.Packer.deps.json"
+            Pack="true" PackagePath="tools\packer\" />
+    </ItemGroup>
+  </Target>
+
+</Project>

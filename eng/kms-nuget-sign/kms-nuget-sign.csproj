@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Author-signs .nupkg files with a certificate whose private key lives in Google Cloud KMS.
+       Cross-platform replacement for `dotnet nuget sign`, which needs a Windows certificate
+       store. Not packed, not part of the solution; built on demand by eng/release.sh. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <AnalysisLevel>none</AnalysisLevel>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Kms.V1" Version="3.27.0" />
+    <PackageReference Include="NuGet.Packaging" Version="7.9.0" />
+  </ItemGroup>
+
+</Project>

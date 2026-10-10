@@ -1,0 +1,53 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{csproj,props,targets,xml,yml,yaml,json}]
+indent_size = 2
+
+[*.cs]
+# CA1848/CA1873: LoggerMessage delegates are not worth the ceremony for a handful of per-request log lines.
+dotnet_diagnostic.CA1848.severity = none
+dotnet_diagnostic.CA1873.severity = none
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_style_var_for_built_in_types = true:silent
+dotnet_sort_system_directives_first = true
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1510.severity = none
+dotnet_diagnostic.CA1308.severity = none
+dotnet_diagnostic.CA1307.severity = none
+dotnet_diagnostic.CA1309.severity = none
+dotnet_diagnostic.CA1310.severity = none
+dotnet_diagnostic.CA1311.severity = none
+dotnet_diagnostic.CA1304.severity = none
+dotnet_diagnostic.CA1862.severity = none
+dotnet_diagnostic.CA1865.severity = none
+dotnet_diagnostic.CA1866.severity = none
+dotnet_diagnostic.CA1847.severity = none
+dotnet_diagnostic.CA1845.severity = none
+dotnet_diagnostic.CA1846.severity = none
+dotnet_diagnostic.CA1861.severity = none
+dotnet_diagnostic.CA1819.severity = none
+dotnet_diagnostic.CA1024.severity = none
+dotnet_diagnostic.CA1031.severity = none
+dotnet_diagnostic.CA2249.severity = none
+dotnet_diagnostic.CA1805.severity = none
+dotnet_diagnostic.CA1812.severity = none
+dotnet_diagnostic.CA1822.severity = none
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CA1515.severity = none
+# ItemAttribute is the EN 16931 name of BG-32
+dotnet_diagnostic.CA1711.severity = none
+
+[tests/**.cs]
+dotnet_diagnostic.CA1515.severity = none
+dotnet_diagnostic.CA1711.severity = none
+dotnet_diagnostic.CA1307.severity = none
+dotnet_diagnostic.CA2007.severity = none

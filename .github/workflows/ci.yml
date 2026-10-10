@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    # WPF: Windows only.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Build (library, packer, tests, sample Setup with embedded payload)
+        run: dotnet build -c Release
+
+      - name: Test (net8.0-windows and net10.0-windows)
+        run: dotnet test -c Release --no-build
+
+      - name: Pack (unsigned, for inspection)
+        run: dotnet pack src/Balsoft.Hive.Installer.Windows/Balsoft.Hive.Installer.Windows.csproj -c Release --no-build -o artifacts/packages
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/packages
