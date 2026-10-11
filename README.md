@@ -35,7 +35,7 @@ Requires Windows 10, Windows Server 2016 or later, x64. Targets .NET 8 and .NET 
     <InstallerPayloadDirectory>..\publish\payload</InstallerPayloadDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Balsoft.Hive.Installer.Windows" Version="1.0.0" />
+    <PackageReference Include="Balsoft.Hive.Installer.Windows" Version="2.0.1" />
     <Resource Include="Assets\logo.png" />
   </ItemGroup>
 </Project>
